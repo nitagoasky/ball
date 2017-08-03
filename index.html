@@ -20,11 +20,17 @@
 		a{color: #000;}
 		.wrapper{clear: both;width: 100%;}
 		/* word-break:break-all 文字换行 */
+		#ab {
+			position: fixed;
+			top:0;
+			left:0;
+		}
 	</style>
 </head>
 
 <body>
 	<canvas id="canvas"></canvas>
+	<div id="ab"></div>
 	<script src="./digit.js"></script>
 	<script type="text/javascript">
 		window.addEventListener('load',function(){
@@ -209,7 +215,8 @@
 				if(e && e.keyCode==40){
 					alert(2);
 				}
-				alert(e.keyCode);
+				var ab = document.getElementById('ab');
+				ab.innerHTML = e.keyCode;
         	};
 		}
 	</script>
