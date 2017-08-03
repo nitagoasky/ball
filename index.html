@@ -1,88 +1,193 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>文档标题</title>
-<style type="text/css">
-body{ margin: 0;padding: 0;font-family: "微软雅黑";overflow: hidden;}
-body,html{-webkit-text-size-adjust: none;width: 100%;height: 100%;}
-*{text-decoration: none;list-style: none;}
-img{border: 0px;}
-ul,li,dl,dd,dt,p,ol,h1,h2,h3,h4,h5{font-size: 12px;font-weight: 100;padding: 0;margin: 0;}
-.wrap{margin: 0 auto;}
-.fl{float: left;}
-.fr{float: right;}
-.index{overflow: hidden;}
-.clr{clear:both; height:0px; width:100%; font-size:1px; line-height:0px; visibility:hidden; overflow:hidden;}
-.pointer{cursor:pointer;}
-a,input,button{ outline:none; }
-::-moz-focus-inner{border:0px;}
-a{color: #000;}
-.wrapper{clear: both;width: 100%;}
-word-break:break-all /*文字换行*/
-
-</style>
+	<meta charset="utf-8">
+	<title>文档标题</title>
+	<style type="text/css">
+		body{ margin: 0;padding: 0;font-family: "微软雅黑";overflow: hidden;}
+		body,html{-webkit-text-size-adjust: none;width: 100%;height: 100%;}
+		*{text-decoration: none;list-style: none;}
+		img{border: 0px;}
+		ul,li,dl,dd,dt,p,ol,h1,h2,h3,h4,h5{font-size: 12px;font-weight: 100;padding: 0;margin: 0;}
+		.wrap{margin: 0 auto;}
+		.fl{float: left;}
+		.fr{float: right;}
+		.index{overflow: hidden;}
+		.clr{clear:both; height:0px; width:100%; font-size:1px; line-height:0px; visibility:hidden; overflow:hidden;}
+		.pointer{cursor:pointer;}
+		a,input,button{ outline:none; }
+		::-moz-focus-inner{border:0px;}
+		a{color: #000;}
+		.wrapper{clear: both;width: 100%;}
+		/* word-break:break-all 文字换行 */
+	</style>
 </head>
- 
+
 <body>
 	<canvas id="canvas"></canvas>
+	<script src="/digit.js"></script>
+	<script type="text/javascript">
+		window.addEventListener('load',function(){
+			const colors = ["#33B5E5","#0099CC","#AA66CC","#9933CC","#99CC00","#669900","#FFBB33","#FF8800","#FF4444","#CC0000"]
+
+			var curTime;
+			var width = document.documentElement.clientWidth;
+			var height = document.documentElement.clientHeight;
+			var balls = [];
+			var MARGIN_TOP = height * 0.35;
+			var MARGIN_LEFT = width * 0.23;
+
+			console.log(width + '-' +MARGIN_LEFT);
+			var RADIUS = 8;
+
+			var canvas = document.getElementById('canvas');
+
+			canvas.width = width;
+			canvas.height = height;
+
+			var ctx = canvas.getContext('2d');
+
+			function getNowTimeSeconds () {
+				var curTime = new Date();
+				return curTime;
+			}
+
+			function draw () {
+				ctx.clearRect(0,0,1920,1080);
+				ctx.fillStyle = '#005588';
+				ctx.beginPath();
+				ctx.arc(ball.x,ball.y,ball.r,0,Math.PI * 2);
+				ctx.closePath();
+				ctx.fill();
+				ctx.stroke();
+			}
+
+			function update () {
+				var nextTime = getNowTimeSeconds();
+				var nextHours = nextTime.getHours();
+				var nextMinutes = nextTime.getMinutes();
+				var nextSeconds = nextTime.getSeconds();
+
+				var curHours = curTime.getHours();
+				var curMinutes = curTime.getMinutes();
+				var curSeconds = curTime.getSeconds();
+
+				if(nextTime != curTime) {
+					if( parseInt(curHours/10) != parseInt(nextHours/10) ){
+						addBalls( MARGIN_LEFT + 0 , MARGIN_TOP , parseInt(curHours/10) );
+					}
+					if( parseInt(curHours%10) != parseInt(nextHours%10) ){
+						addBalls( MARGIN_LEFT + 15*(RADIUS+1) , MARGIN_TOP , parseInt(curHours/10) );
+					}
+
+					if( parseInt(curMinutes/10) != parseInt(nextMinutes/10) ){
+						addBalls( MARGIN_LEFT + 39*(RADIUS+1) , MARGIN_TOP , parseInt(curMinutes/10) );
+					}
+					if( parseInt(curMinutes%10) != parseInt(nextMinutes%10) ){
+						addBalls( MARGIN_LEFT + 54*(RADIUS+1) , MARGIN_TOP , parseInt(curMinutes%10) );
+					}
+
+					if( parseInt(curSeconds/10) != parseInt(nextSeconds/10) ){
+						addBalls( MARGIN_LEFT + 78*(RADIUS+1) , MARGIN_TOP , parseInt(curSeconds/10) );
+					}
+					if( parseInt(curSeconds%10) != parseInt(nextSeconds%10) ){
+						addBalls( MARGIN_LEFT + 93*(RADIUS+1) , MARGIN_TOP , parseInt(nextSeconds%10) );
+					}
+					updateBalls();
+
+					curTime = nextTime;
+				}
+
+			}
+
+			function updateBalls(){
+
+				for( var i = 0 ; i < balls.length ; i ++ ){
+
+					balls[i].x += balls[i].vx;
+					balls[i].y += balls[i].vy;
+					balls[i].vy += balls[i].g;
+
+					if( balls[i].y >= height-RADIUS ){
+						balls[i].y = height-RADIUS;
+						balls[i].vy = - balls[i].vy*0.75;
+					}
+				}
+			}
+
+			function addBalls (x, y, num) {
+				for( var i = 0 ; i < digit[num].length ; i ++ ) {
+					for(var j = 0 ; j < digit[num][i].length ; j ++ ) {
+						if( digit[num][i][j] == 1 ){
+							var aBall = {
+								x:x+j*2*(RADIUS+1)+(RADIUS+1),
+								y:y+i*2*(RADIUS+1)+(RADIUS+1),
+								g:1.5+Math.random(),
+								vx:Math.pow( -1 , Math.ceil( Math.random()*1000 ) ) * 4,
+								vy:-5,
+								color: colors[ Math.floor( Math.random()*colors.length ) ]
+							}
+
+							balls.push( aBall )
+						}
+					}
+				}
+					
+			}
+
+			function render (ctx) {
+				ctx.clearRect(0,0,width,height);
+
+				var nowTimeSeconds = getNowTimeSeconds();
+				var hour = nowTimeSeconds.getHours();
+				var minute = nowTimeSeconds.getMinutes();
+				var second = nowTimeSeconds.getSeconds();
+				
+				renderDigit(MARGIN_LEFT, MARGIN_TOP, parseInt(hour / 10), ctx);
+				renderDigit(MARGIN_LEFT + 15 * (RADIUS + 1), MARGIN_TOP, parseInt(hour % 10), ctx);
+				renderDigit(MARGIN_LEFT + 30 * (RADIUS + 1), MARGIN_TOP, 10, ctx);
+				renderDigit(MARGIN_LEFT + 39 * (RADIUS + 1), MARGIN_TOP, parseInt(minute / 10), ctx);
+				renderDigit(MARGIN_LEFT + 54 * (RADIUS + 1), MARGIN_TOP, parseInt(minute % 10), ctx);
+				renderDigit(MARGIN_LEFT + 69 * (RADIUS + 1), MARGIN_TOP, 10, ctx);
+				renderDigit(MARGIN_LEFT + 78 * (RADIUS + 1), MARGIN_TOP, parseInt(second / 10), ctx);
+				renderDigit(MARGIN_LEFT + 93 * (RADIUS + 1), MARGIN_TOP, parseInt(second % 10), ctx);
+
+				for( var i = 0 ; i < balls.length ; i ++ ){
+					ctx.fillStyle=balls[i].color;
+					ctx.beginPath();
+					ctx.arc( balls[i].x , balls[i].y , RADIUS , 0 , 2*Math.PI , true );
+					ctx.closePath();
+					ctx.fill();
+				}
+
+			}
+
+			function init () {
+				curTime = new Date();
+				setInterval(function(){
+					render(ctx);
+					update();
+				},30);
+			}
+
+			function renderDigit( x , y , num , cxt ){
+
+				cxt.fillStyle = "rgb(0,102,153)";
+
+				for( var i = 0 ; i < digit[num].length ; i ++ )
+					for(var j = 0 ; j < digit[num][i].length ; j ++ )
+						if( digit[num][i][j] == 1 ){
+							cxt.beginPath();
+							cxt.arc( x+j*2*(RADIUS+1)+(RADIUS+1) , y+i*2*(RADIUS+1)+(RADIUS+1) , RADIUS , 0 , 2*Math.PI )
+							cxt.closePath()
+
+							cxt.fill()
+						}
+				}
+
+			init();
+
+		});
+	</script>
 </body>
- <script type="text/javascript">
- 	window.addEventListener('load',function(){
-
- 		var width = document.documentElement.clientWidth;
- 		var height = document.documentElement.clientHeight;
-
- 		var ball = {x:1000,y:0,r:60,vx:-4,vy:0,g:0.5};
- 		var canvas = document.getElementById('canvas');
-
- 		canvas.width = width;
- 		canvas.height = height;
-
- 		var ctx = canvas.getContext('2d');
-
- 		function draw () {
- 			ctx.clearRect(0,0,1920,1080);
-	 		ctx.fillStyle = '#005588';
-	 		ctx.beginPath();
-	 		ctx.arc(ball.x,ball.y,ball.r,0,Math.PI * 2);
-	 		ctx.closePath();
-	 		ctx.fill();
-	 		ctx.stroke();
- 		}
-
- 		function update () {
- 			ball.x += ball.vx;
- 			ball.y += ball.vy;
- 			ball.vy += ball.g;
-
- 			console.log(ball.vy);
-
- 			if(ball.y > height - ball.r){
- 				ball.y = height - ball.r;
- 				ball.vy = - ball.vy;
- 			}
-
- 			if(ball.x - ball.r < 0) {
- 				ball.x = ball.r;
- 				ball.vx = - ball.vx;
- 			}
-
- 			if(ball.x > width - ball.r) {
- 				ball.x = width - ball.r;
- 				ball.vx = - ball.vx;
- 			}
-
- 			if(ball.y - ball.r < 0) {
- 				ball.y = ball.r;
- 				ball.vy = - ball.vy;
- 			}
- 		}
-
- 		setInterval(function(){
- 			draw();
- 			update();
- 		},30);
- 	});
- </script>
 </html>
