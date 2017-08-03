@@ -25,7 +25,7 @@
 
 <body>
 	<canvas id="canvas"></canvas>
-	<audio id="audio" src="./四小天鹅舞曲.mp3" loop></audio>
+	<audio id="audio" loop></audio>
 	<script src="./digit.js"></script>
 	<script type="text/javascript">
 		window.addEventListener('load',function(){
@@ -203,6 +203,8 @@
 
 		window.onload=function(){
 			var audio = document.getElementById('audio');
+			audio.src="./四小天鹅舞曲.mp3";
+			audio.play();
 			document.onkeydown=function(event){
 				var e = event || window.event || arguments.callee.caller.arguments[0];
 				if(e && e.keyCode==38){
