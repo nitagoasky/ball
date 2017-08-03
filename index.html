@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>文档标题</title>
+<style type="text/css">
+body{ margin: 0;padding: 0;font-family: "微软雅黑";overflow: hidden;}
+body,html{-webkit-text-size-adjust: none;width: 100%;height: 100%;}
+*{text-decoration: none;list-style: none;}
+img{border: 0px;}
+ul,li,dl,dd,dt,p,ol,h1,h2,h3,h4,h5{font-size: 12px;font-weight: 100;padding: 0;margin: 0;}
+.wrap{margin: 0 auto;}
+.fl{float: left;}
+.fr{float: right;}
+.index{overflow: hidden;}
+.clr{clear:both; height:0px; width:100%; font-size:1px; line-height:0px; visibility:hidden; overflow:hidden;}
+.pointer{cursor:pointer;}
+a,input,button{ outline:none; }
+::-moz-focus-inner{border:0px;}
+a{color: #000;}
+.wrapper{clear: both;width: 100%;}
+word-break:break-all /*文字换行*/
+
+</style>
+</head>
+ 
+<body>
+	<canvas id="canvas"></canvas>
+</body>
+ <script type="text/javascript">
+ 	window.addEventListener('load',function(){
+
+ 		var width = document.documentElement.clientWidth;
+ 		var height = document.documentElement.clientHeight;
+
+ 		var ball = {x:1000,y:0,r:60,vx:-4,vy:0,g:0.5};
+ 		var canvas = document.getElementById('canvas');
+
+ 		canvas.width = width;
+ 		canvas.height = height;
+
+ 		var ctx = canvas.getContext('2d');
+
+ 		function draw () {
+ 			ctx.clearRect(0,0,1920,1080);
+	 		ctx.fillStyle = '#005588';
+	 		ctx.beginPath();
+	 		ctx.arc(ball.x,ball.y,ball.r,0,Math.PI * 2);
+	 		ctx.closePath();
+	 		ctx.fill();
+	 		ctx.stroke();
+ 		}
+
+ 		function update () {
+ 			ball.x += ball.vx;
+ 			ball.y += ball.vy;
+ 			ball.vy += ball.g;
+
+ 			console.log(ball.vy);
+
+ 			if(ball.y > height - ball.r){
+ 				ball.y = height - ball.r;
+ 				ball.vy = - ball.vy;
+ 			}
+
+ 			if(ball.x - ball.r < 0) {
+ 				ball.x = ball.r;
+ 				ball.vx = - ball.vx;
+ 			}
+
+ 			if(ball.x > width - ball.r) {
+ 				ball.x = width - ball.r;
+ 				ball.vx = - ball.vx;
+ 			}
+
+ 			if(ball.y - ball.r < 0) {
+ 				ball.y = ball.r;
+ 				ball.vy = - ball.vy;
+ 			}
+ 		}
+
+ 		setInterval(function(){
+ 			draw();
+ 			update();
+ 		},30);
+ 	});
+ </script>
+</html>
