@@ -206,10 +206,16 @@
 
 		});
 
+		document.addEventListener('DOMContentLoaded', function() { 
+			function audioAutoPlay() {        
+				var audio = document.getElementById('audio');
+				audio.src="./四小天鹅舞曲.mp3";           
+				audio.play();
+			}
+		});
+
 		window.onload=function(){
 			var audio = document.getElementById('audio');
-			audio.src="./四小天鹅舞曲.mp3";
-			audio.play();
 			document.onkeydown=function(event){
 				var e = event || window.event || arguments.callee.caller.arguments[0];
 				if(e && e.keyCode==38){
