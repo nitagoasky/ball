@@ -20,17 +20,12 @@
 		a{color: #000;}
 		.wrapper{clear: both;width: 100%;}
 		/* word-break:break-all 文字换行 */
-		#ab {
-			position: fixed;
-			top:0;
-			left:0;
-		}
 	</style>
 </head>
 
 <body>
 	<canvas id="canvas"></canvas>
-	<div id="ab"></div>
+	<audio id="audio" src="./四小天鹅舞曲.mp3" loop></audio>
 	<script src="./digit.js"></script>
 	<script type="text/javascript">
 		window.addEventListener('load',function(){
@@ -206,17 +201,22 @@
 
 		});
 
-		window.onload=function(){ 
+		window.onload=function(){
+			var audio = document.getElementById('audio');
 			document.onkeydown=function(event){
 				var e = event || window.event || arguments.callee.caller.arguments[0];
 				if(e && e.keyCode==38){
-					alert(1);
+					if(audio.volume == 1) {
+						return false;
+					}
+					audio.volume += 0.1;
 				}
 				if(e && e.keyCode==40){
-					alert(2);
+					if(audio.volume == 0) {
+						return false;
+					}
+					audio.volume -= 0.1;
 				}
-				var ab = document.getElementById('ab');
-				ab.innerHTML = e.keyCode;
         	};
 		}
 	</script>
