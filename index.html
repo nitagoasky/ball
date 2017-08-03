@@ -113,6 +113,18 @@
 						balls[i].vy = - balls[i].vy*0.75;
 					}
 				}
+
+				var cnt = 0;
+				for(var i = 0; i < balls.length; i++) {
+					if(balls[i].x + RADIUS > 0 && balls[i].x - RADIUS < width) {
+						balls[cnt++] = balls[i];
+					}
+				}
+
+				while(balls.length > Math.min(300,cnt)) {
+					balls.pop();
+				}
+				console.log(cnt);
 			}
 
 			function addBalls (x, y, num) {
