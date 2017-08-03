@@ -199,6 +199,18 @@
 			init();
 
 		});
+
+		window.onload=function(){ 
+			document.onkeydown=function(event){
+				var e = event || window.event || arguments.callee.caller.arguments[0];
+				if(e && e.keyCode==38){
+					alert(1);
+				}
+				if(e && e.keyCode==40){
+					alert(2);
+				}
+        	};
+		}
 	</script>
 </body>
 </html>
